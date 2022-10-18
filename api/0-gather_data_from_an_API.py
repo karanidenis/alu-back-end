@@ -35,3 +35,4 @@ if __name__ == "__main__":
     for item in result:
         if item.get('completed') and item.get('userId') == int(sys.argv[1]):
             print("\t {}".format(item['title']))
+            
