@@ -1,4 +1,8 @@
 #!/usr/bin/python3
+"""
+ the nodule gets information from an api
+"""
+
 import requests
 import sys
 
