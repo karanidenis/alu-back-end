@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 """
- the nodule gets information from an api
+module gets information from an api
 """
 
 import requests
@@ -30,9 +30,9 @@ if __name__ == '__main__':
         if value.get('completed') and value.get('userId') == int(sys.argv[1]):
             # getting tasks completed
             count += 1 
-        print('Employee', empl_name 'is done with tasks(', count_1'/'count '):')
+    print('Employee', empl_name 'is done with tasks(', count_1'/'count '):')
         
     for value in result:
         if value.get('completed') and value.get('userId') == int(sys.argv[1]):
         # getting the titles of tasks supposed to be done
-        print('\t' value['title'])
+             print('\t' value['title'])
