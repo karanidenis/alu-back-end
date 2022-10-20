@@ -37,7 +37,6 @@ if __name__ == "__main__":
         if item.get('completed') and item.get('userId') == int(sys.argv[1]):
             print("\t {}".format(item['title']))
 
-
        
 if __name__ == '__main__':
     main()
