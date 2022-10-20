@@ -1,10 +1,8 @@
 #!/usr/bin/python3
-
 """
-Module
+gets the tasks done by an employee from an API
 """
 
-from ast import main
 import requests
 import sys
 
