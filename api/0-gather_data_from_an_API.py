@@ -8,8 +8,7 @@ from ast import main
 import requests
 import sys
 
-
-if __name__ == "__main__":
+def main():
     url = "https://jsonplaceholder.typicode.com/users/{}/todos".format(
         sys.argv[1])
     url_2 = "https://jsonplaceholder.typicode.com/users/{}/".format(
@@ -36,3 +35,7 @@ if __name__ == "__main__":
     for item in result:
         if item.get('completed') and item.get('userId') == int(sys.argv[1]):
             print("\t {}".format(item['title']))
+
+
+if __name__ == "__main__":
+    main()
