@@ -5,13 +5,11 @@ Module
 export data in the JSON format
 """
 
-import csv
 import json
 import requests
 from sys import argv
 
-
-if __name__ == "__main__":
+def main():
     todos_url = "https://jsonplaceholder.typicode.com/todos"
     user_url = "https://jsonplaceholder.typicode.com/users/"
 
@@ -38,3 +36,7 @@ if __name__ == "__main__":
     json_file = {str(argv[1]): json_list}
     with open(filename, 'w') as f:
         json.dump(json_file, f)
+
+
+if __name__ == "__main__":
+    main()

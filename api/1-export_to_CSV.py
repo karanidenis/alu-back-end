@@ -1,40 +1,40 @@
 #!/usr/bin/python3
 
 """
-Module
-export data in the JSON format
+Module of script that gets todo list from an API 
+and export resutlts to csv file.
 """
 
 import csv
-import json
 import requests
-from sys import argv
+import sys 
 
 
 if __name__ == "__main__":
-    todos_url = "https://jsonplaceholder.typicode.com/todos"
-    user_url = "https://jsonplaceholder.typicode.com/users/"
+    url = "https://jsonplaceholder.typicode.com/"
 
-    todos = requests.get(todos_url).json()
-    users = requests.get(user_url).json()
-
-    for user in users:
-        if user.get('id') == int(argv[1]):
-            user_name = user.get('username')
-            break
-
-    tasks = []
-    for todo in todos:
-        if todo.get('userId') == int(argv[1]):
-            tasks.append((todo.get('completed'), todo.get('title')))
-
-    filename = "{}.json".format(argv[1])
-
-    json_list = []
+    user_id = sys.argv[1]
+    user_url = '{}users/{}'.format(url, user_id)
+    res = requests.get(user_url)
+    json_o = res.json()
+    name = json_o.get('username')
+   
+    todos = '{}todos?userId={}'.format(url, user_id)
+    res = requests.get(todos)
+    tasks = res.json
+    list_tasks = []
     for task in tasks:
-        json_list.append({"task": task[1], "completed": task[0],
-                         "username": user_name})
+        list_tasks.append([user_id,
+                            name,
+                            tasks.get('completed'),
+                            tasks.get('title')])
 
-    json_file = {str(argv[1]): json_list}
+    filename = "{}.csv".format(user_id)
     with open(filename, 'w') as f:
-        json.dump(json_file, f)
+        f_writer = csv.writer(f,
+                                delimiter=',',
+                                quotechar='"',
+                                quoting=csv.QUOTE_ALL)
+
+        for task in list_tasks:
+            f_writer.writerow(tasks)

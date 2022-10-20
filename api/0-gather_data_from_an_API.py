@@ -4,6 +4,7 @@
 Module
 """
 
+from ast import main
 import requests
 import sys
 
@@ -19,7 +20,7 @@ if __name__ == "__main__":
     response_2 = requests.get(url_2)
     result_2 = response_2.json()
 
-    item_2 = result_2.get('name')
+    u_name = result_2.get('name')
 
     count = 0
     count_2 = 0
@@ -29,10 +30,14 @@ if __name__ == "__main__":
             count_2 += 1
         if item.get('completed') and item.get('userId') == int(sys.argv[1]):
             count += 1
-    print('Employee {} is done with tasks({}/{}):'.format(item_2,
+    print('Employee {} is done with tasks({}/{}):'.format(u_name,
                                                           count, count_2))
 
     for item in result:
         if item.get('completed') and item.get('userId') == int(sys.argv[1]):
             print("\t {}".format(item['title']))
-            
+
+
+       
+if __name__ == '__main__':
+    main()

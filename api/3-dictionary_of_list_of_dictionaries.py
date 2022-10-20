@@ -9,7 +9,7 @@ import json
 import requests
 
 
-if __name__ == "__main__":
+def main():
     todos_url = "https://jsonplaceholder.typicode.com/todos"
     user_url = "https://jsonplaceholder.typicode.com/users/"
 
@@ -37,3 +37,8 @@ if __name__ == "__main__":
     filename = "todo_all_employees.json"
     with open(filename, "w") as f:
         json.dump(output, f, sort_keys=True)
+
+
+if __name__ == "__main__":
+    main()
+    
