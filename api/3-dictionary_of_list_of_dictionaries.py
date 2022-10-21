@@ -7,32 +7,29 @@ export data in the JSON format
 
 import json
 import requests
-
-
-def main():
-    todos_url = "https://jsonplaceholder.typicode.com/todos"
-
-    todos = requests.get(todos_url).json()
-    output = {}
-
-    for todo in todos:
-        user_id = todo.get('userId')
-        if user_id not in output.keys():
-            output[user_id] = []
-            user_url = 'https://jsonplaceholder.typicode.com/users/{}'.format(
-                user_id)
-            user_name = requests.get(user_url).json().get('username')
-
-        output[user_id].append(
-            {
-                "username": user_name,
-                "task": todo.get('title'),
-                "completed": todo.get('completed')
-            })
-
-    with open("todo_all_employees.json", "w") as f:
-        json.dump(output, f)
+import sys
 
 
 if __name__ == "__main__":
-    main()
+    url = 'https://jsonplaceholder.typicode.com/'
+    user = '{}users'.format(url)
+    res = requests.get(user)
+    json_o = res.json()
+    d_task = {}
+    for user in json_o:
+        name = user.get('username')
+        userid = user.get('id')
+        todos = '{}todos?userId={}'.format(url, userid)
+        res = requests.get(todos)
+        tasks = res.json()
+        l_task = []
+        for task in tasks:
+            dict_task = {"username": name,
+                         "task": task.get('title'),
+                         "completed": task.get('completed')}
+            l_task.append(dict_task)
+
+        d_task[str(userid)] = l_task
+    filename = 'todo_all_employees.json'
+    with open(filename, mode='w') as f:
+        json.dump(d_task, f)
