@@ -9,34 +9,27 @@ import json
 import requests
 from sys import argv
 
-def main():
-    todos_url = "https://jsonplaceholder.typicode.com/todos"
-    user_url = "https://jsonplaceholder.typicode.com/users/"
-
-    todos = requests.get(todos_url).json()
-    users = requests.get(user_url).json()
-
-    for user in users:
-        if user.get('id') == int(argv[1]):
-            user_name = user.get('username')
-            break
-
-    tasks = []
-    for todo in todos:
-        if todo.get('userId') == int(argv[1]):
-            tasks.append((todo.get('completed'), todo.get('title')))
-
-    filename = "{}.json".format(argv[1])
-
-    json_list = []
-    for task in tasks:
-        json_list.append({"task": task[1], "completed": task[0],
-                         "username": user_name})
-
-    json_file = {str(argv[1]): json_list}
-    with open(filename, 'w') as f:
-        json.dump(json_file, f)
-
 
 if __name__ == "__main__":
-    main()
+    url = 'https://jsonplaceholder.typicode.com/'
+
+    userid = sys.argv[1]
+    user = '{}users/{}'.format(url, userid)
+    res = requests.get(user)
+    json_o = res.json()
+    name = json_o.get('username')
+
+    todos = '{}todos?userId={}'.format(url, userid)
+    res = requests.get(todos)
+    tasks = res.json()
+    l_task = []
+    for task in tasks:
+        dict_task = {"task": task.get('title'),
+                     "completed": task.get('completed'),
+                     "username": name}
+        l_task.append(dict_task)
+
+    d_task = {str(userid): l_task}
+    filename = '{}.json'.format(userid)
+    with open(filename, mode='w') as f:
+        json.dump(d_task, f)
