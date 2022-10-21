@@ -10,26 +10,30 @@ import requests
 import sys
 
 
-if __name__ == "__main__":
-    url = 'https://jsonplaceholder.typicode.com/'
+def main():
+    """main function"""
+    user_id = int(sys.argv[1])
+    todo_url = 'https://jsonplaceholder.typicode.com/todos'
+    user_url = 'https://jsonplaceholder.typicode.com/users/{}'.format(user_id)
 
-    userid = sys.argv[1]
-    user = '{}users/{}'.format(url, userid)
-    res = requests.get(user)
-    json_o = res.json()
-    name = json_o.get('username')
+    response = requests.get(todo_url)
+    user_name = requests.get(user_url).json().get('username')
+    user_data = []
+    output = {user_id: user_data}
 
-    todos = '{}todos?userId={}'.format(url, userid)
-    res = requests.get(todos)
-    tasks = res.json()
-    l_task = []
-    for task in tasks:
-        dict_task = {"task": task.get('title'),
-                     "completed": task.get('completed'),
-                     "username": name}
-        l_task.append(dict_task)
+    for todo in response.json():
+        if todo.get('userId') == user_id:
+            user_data.append(
+                {
+                    "task": todo.get('title'),
+                    "completed": todo.get('completed'),
+                    "username": user_name,
+                })
+    print(output)
+    file_name = "{}.json".format(user_id)
+    with open(file_name, 'w') as file:
+        json.dump(output, file)
 
-    d_task = {str(userid): l_task}
-    filename = '{}.json'.format(userid)
-    with open(filename, mode='w') as f:
-        json.dump(d_task, f)
+
+if __name__ == '__main__':
+    main()
