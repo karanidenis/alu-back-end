@@ -6,6 +6,7 @@ gets the tasks done by an employee from an API
 import requests
 import sys
 
+
 def main():
     url = "https://jsonplaceholder.typicode.com/users/{}/todos".format(
         sys.argv[1])
