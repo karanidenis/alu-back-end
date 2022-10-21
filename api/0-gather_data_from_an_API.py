@@ -7,34 +7,22 @@ import requests
 import sys
 
 
-def main():
-    url = "https://jsonplaceholder.typicode.com/users/{}/todos".format(
-        sys.argv[1])
-    url_2 = "https://jsonplaceholder.typicode.com/users/{}/".format(
-        sys.argv[1])
-
-    response = requests.get(url)
-    result = response.json()
-    response_2 = requests.get(url_2)
-    result_2 = response_2.json()
-
-    u_name = result_2.get('name')
-
-    count = 0
-    count_2 = 0
-
-    for item in result:
-        if item.get('userId') == int(sys.argv[1]):
-            count_2 += 1
-        if item.get('completed') and item.get('userId') == int(sys.argv[1]):
-            count += 1
-    print('Employee {} is done with tasks({}/{}):'.format(u_name,
-                                                          count, count_2))
-
-    for item in result:
-        if item.get('completed') and item.get('userId') == int(sys.argv[1]):
-            print("\t {}".format(item['title']))
-
-
 if __name__ == "__main__":
-    main()
+    url = 'https://jsonplaceholder.typicode.com/'
+
+    user = '{}users/{}'.format(url, sys.argv[1])
+    res = requests.get(user)
+    json_o = res.json()
+    print("Employee {} is done with tasks".format(json_o.get('name')), end="")
+
+    todos = '{}todos?userId={}'.format(url, sys.argv[1])
+    res = requests.get(todos)
+    tasks = res.json()
+    l_task = []
+    for task in tasks:
+        if task.get('completed') is True:
+            l_task.append(task)
+
+    print("({}/{}):".format(len(l_task), len(tasks)))
+    for task in l_task:
+        print("\t {}".format(task.get("title")))
