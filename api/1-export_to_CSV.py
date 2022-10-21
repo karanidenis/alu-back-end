@@ -1,13 +1,13 @@
 #!/usr/bin/python3
 
 """
-Module of script that gets todo list from an API 
+Module of script that gets todo list from an API
 and export resutlts to csv file.
 """
 
 import csv
 import requests
-import sys 
+import sys
 
 
 if __name__ == "__main__":
