@@ -7,22 +7,32 @@ import requests
 import sys
 
 
-if __name__ == "__main__":
-    url = 'https://jsonplaceholder.typicode.com/'
+def main():
+    """main function"""
+    user_id = int(sys.argv[1])
+    todo_url = 'https://jsonplaceholder.typicode.com/todos'
+    user_url = 'https://jsonplaceholder.typicode.com/users/{}'.format(user_id)
 
-    user = '{}users/{}'.format(url, sys.argv[1])
-    res = requests.get(user)
-    json_o = res.json()
-    print("Employee {} is done with tasks".format(json_o.get('name')), end="")
+    response = requests.get(todo_url)
 
-    todos = '{}todos?userId={}'.format(url, sys.argv[1])
-    res = requests.get(todos)
-    tasks = res.json()
-    l_task = []
-    for task in tasks:
-        if task.get('completed') is True:
-            l_task.append(task)
+    total_questions = 0
+    completed = []
+    for todo in response.json():
 
-    print("({}/{}):".format(len(l_task), len(tasks)))
-    for task in l_task:
-        print("\t {}".format(task.get("title")))
+        if todo['userId'] == user_id:
+            total_questions += 1
+
+            if todo['completed']:
+                completed.append(todo['title'])
+
+    user_name = requests.get(user_url).json()['name']
+
+    printer = ("Employee {} is done with tasks({}/{}):".format(user_name,
+               len(completed), total_questions))
+    print(printer)
+    for q in completed:
+        print("\t {}".format(q))
+
+
+if __name__ == '__main__':
+    main()
