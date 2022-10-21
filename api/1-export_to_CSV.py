@@ -10,31 +10,35 @@ import requests
 import sys 
 
 
+def main():
+    """main function"""
+    user_id = int(sys.argv[1])
+    todo_url = 'https://jsonplaceholder.typicode.com/todos'
+    user_url = 'https://jsonplaceholder.typicode.com/users/{}'.format(user_id)
+
+    file_content = []
+
+    response = requests.get(todo_url)
+    user_name = requests.get(user_url).json().get('username')
+
+    for todo in response.json():
+        if todo.get('userId') == user_id:
+            file_content.append(
+                [str(user_id),
+                 user_name,
+                 todo.get('completed'),
+                 "{}".format(todo.get('title'))])
+
+    print(file_content)
+    file_name = "{}.csv".format(user_id)
+    with open(file_name, 'w', newline='') as csv_file:
+        csv_writer = csv.writer(csv_file, quoting=csv.QUOTE_ALL)
+        for row in file_content:
+            for item in row:
+                str(item)
+            csv_writer.writerow(row)
+        print('file written successfully')
+
+
 if __name__ == "__main__":
-    url = "https://jsonplaceholder.typicode.com/"
-
-    user_id = sys.argv[1]
-    user_url = '{}users/{}'.format(url, user_id)
-    res = requests.get(user_url)
-    json_o = res.json()
-    name = json_o.get('username')
-   
-    todos = '{}todos?userId={}'.format(url, user_id)
-    res = requests.get(todos)
-    tasks = res.json
-    list_tasks = []
-    for task in tasks:
-        list_tasks.append([user_id,
-                            name,
-                            tasks.get('completed'),
-                            tasks.get('title')])
-
-    filename = "{}.csv".format(user_id)
-    with open(filename, 'w') as f:
-        f_writer = csv.writer(f,
-                                delimiter=',',
-                                quotechar='"',
-                                quoting=csv.QUOTE_ALL)
-
-        for task in list_tasks:
-            f_writer.writerow(tasks)
+    main()
